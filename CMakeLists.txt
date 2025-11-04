@@ -1,4 +1,4 @@
-﻿# CMakeList.txt : CMake project for BomberMan, include source and define
+# CMakeList.txt : CMake project for BomberMan, include source and define
 # project specific logic here.
 #
 cmake_minimum_required (VERSION 3.8)
@@ -20,6 +20,8 @@ add_executable (BomberManClient
     "src/entrypoint/entrypoint.cpp"
     "src/states/sdl_state.h"
     "src/states/sdl_state.cpp"
+    "src/core/asset_manager.h"
+    "src/core/asset_manager.cpp"
 )
 
 target_include_directories(BomberManClient PUBLIC
