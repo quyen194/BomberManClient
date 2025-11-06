@@ -1,4 +1,4 @@
-# CMakeList.txt : CMake project for BomberMan, include source and define
+﻿# CMakeList.txt : CMake project for BomberMan, include source and define
 # project specific logic here.
 #
 cmake_minimum_required (VERSION 3.8)
@@ -22,6 +22,14 @@ add_executable (BomberManClient
     "src/states/sdl_state.cpp"
     "src/core/asset_manager.h"
     "src/core/asset_manager.cpp"
+    "src/core/timer.h"
+    "src/core/animation.h"
+    "src/entities/map_tile.h"
+    "src/entities/spoil.h"
+    "src/map/map_manager.h"
+    "src/map/map_manager.cpp"
+    "src/states/game_state.h"
+    "src/states/game_state.cpp"
 )
 
 target_include_directories(BomberManClient PUBLIC
@@ -33,6 +41,13 @@ target_include_directories(BomberManClient PUBLIC
 target_link_libraries(BomberManClient PRIVATE SDL3::SDL3 SDL3_image::SDL3_image SDL3_mixer::SDL3_mixer glm::glm)
 
 # This section handles copying required files to the output directory after a build.
+
+add_custom_command(
+    TARGET BomberManClient POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:BomberManClient>/assets
+)
+
 if(WIN32) # These commands are only necessary on Windows for DLLs.
     add_custom_command(
         TARGET BomberManClient POST_BUILD

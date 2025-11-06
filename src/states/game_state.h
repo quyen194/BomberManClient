@@ -5,33 +5,44 @@
   author:    quyen19492
   email:     quyen19492@gmail.com
 
-  created:   2025/11/02 15:52
-  filename:  AriesGames\BomberManClient\entrypoint\entrypoint.cpp
+  created:   2025/11/06 6:09
+  filename:  AriesGames\BomberManClient\src\states\game_state.h
 
   purpose:
 *********************************************************************/
 
 
 // -----------------------------------------------------------------------------
-#include <SDL3/SDL.h>
-
-#include "states/game_state.h"
+#ifndef ARIES_GAMES_BOMBERMANCLIENT_SRC_STATES_GAME_STATE_H
+#define ARIES_GAMES_BOMBERMANCLIENT_SRC_STATES_GAME_STATE_H
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-#ifdef _WIN32
-#pragma comment(linker, "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
-#endif  // _WIN32
+#include "states/sdl_state.h"
+#include "core/asset_manager.h"
+#include "map/map_manager.h"
+// -----------------------------------------------------------------------------
+
+
+// -----------------------------------------------------------------------------
+
+class GameState {
+ public:
+  GameState();
+  virtual ~GameState();
+
+  void Loop();
+
+ private:
+  SDLState sdl_state_;
+  AssetManager asset_manager_;
+  MapManager map_manager_;
+
+ private:
+  bool inited_;
+};
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-
-int main(int argc, char *argv[]) {
-  // init game window
-  GameState game_state;
-
-  game_state.Loop();
-  
-  return 0;
-}
+#endif  // ARIES_GAMES_BOMBERMANCLIENT_SRC_STATES_GAME_STATE_H
 // -----------------------------------------------------------------------------

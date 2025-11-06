@@ -29,10 +29,12 @@ class SDLState {
   SDLState();
   virtual ~SDLState();
 
-  bool initialize();
-  void cleanup();
+  static SDLState& Instance() { return *instance_; }
 
-  bool isInited();
+  bool Initialize();
+  void Cleanup();
+
+  bool IsInited();
 
   inline void SetWidth(int value) { width_ = value; }
   inline void SetHeight(int value) { height_ = value; }
@@ -48,7 +50,7 @@ class SDLState {
   bool Key(int index) const { return keys_[index]; }
 
  private:
-  bool inited;
+  bool inited_;
 
   int width_;
   int height_;
@@ -59,6 +61,8 @@ class SDLState {
   SDL_Renderer *renderer_;
 
   const bool *keys_;
+
+  static SDLState* instance_;
 };
 // -----------------------------------------------------------------------------
 
