@@ -18,25 +18,35 @@
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-//#include "include/macro.h"
 #include <vector>
 
 #include "entities/map_tile.h"
+#include "entities/player.h"
 #include "entities/spoil.h"
+
+#include "map/map_updater.h"
+
+#include "states/sdl_state.h"
 // -----------------------------------------------------------------------------
 
 
 // -----------------------------------------------------------------------------
 
-class MapManager {
+class MapManager : public MapUpdater {
  public:
   MapManager(SDLState &sdl_state, AssetManager &asset_manager);
   virtual ~MapManager();
 
   bool Initialize();
 
-  void Update(float deltaTime);
+  void Update(float delta_time);
   void Draw();
+
+  void UpdatePlayers(json &obj);
+  void UpdatePlayer(json &obj);
+
+  void MovePlayer(Player *player, MoveDir dir);
+  void MovePlayer(Player *player, glm::vec2 pos_start, glm::vec2 pos_end);
 
  private:
   void Load();
@@ -45,11 +55,15 @@ class MapManager {
   SDLState &sdl_state_;
   AssetManager &asset_manager_;
 
- private:
+ protected:
+  float sprite_size_;
   glm::vec2 screen_pos_;
   std::vector<MapTile*> layer_tiles_;
   std::vector<DynamicMapTile*> dynamic_tiles_;
   std::vector<Spoil> layer_spoils_;
+  std::vector<Player*> layer_players_;
+
+  Player *player1_;
 };
 // -----------------------------------------------------------------------------
 

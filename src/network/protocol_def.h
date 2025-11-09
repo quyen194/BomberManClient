@@ -5,49 +5,47 @@
   author:    quyen19492
   email:     quyen19492@gmail.com
 
-  created:   2025/11/06 6:09
-  filename:  AriesGames\BomberManClient\src\states\game_state.h
+  created:   2025/11/09 10:27
+  filename:  AriesGames\BomberManClient\src\network\protocol_def.h
 
   purpose:
 *********************************************************************/
 
 
 // -----------------------------------------------------------------------------
-#ifndef ARIES_GAMES_BOMBERMANCLIENT_SRC_STATES_GAME_STATE_H
-#define ARIES_GAMES_BOMBERMANCLIENT_SRC_STATES_GAME_STATE_H
+#ifndef ARIES_GAMES_BOMBERMANCLIENT_SRC_NETWORK_PROTOCOL_DEF_H
+#define ARIES_GAMES_BOMBERMANCLIENT_SRC_NETWORK_PROTOCOL_DEF_H
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-#include "states/sdl_state.h"
-#include "core/asset_manager.h"
-#include "map/map_manager.h"
+//#include "include/macro.h"
 // -----------------------------------------------------------------------------
 
 
 // -----------------------------------------------------------------------------
-
-class GameState : public MapManager {
- public:
-  GameState();
-  virtual ~GameState();
-
-  void Loop();
-  void Update(float delta_time);
-  void Draw();
-
-  void HandleKeyInput(Player *player, SDL_Event &event);
-
-  void TestParsePlayers();
-
- private:
-  SDLState sdl_state_;
-  AssetManager asset_manager_;
-
- private:
-  bool inited_;
+namespace _ServerMsgType {
+enum T {
+  kJoinGame,
+  kDrivePlayer,
+  kGameStart,
+  kGameUpdate,
+  kGamePause,
+  kGameEnd,
+  kPlayerJoined,
+  kPlayerStartMoving,
+  kPlayerStopMoving,
+  kPlayerEndMoving,
+  kPlayerPickSpoil,
+  kPlayerBeIsolated,
+  kPlayerBackToPlayground,
+  kBombSetup,
+  kBombExploded,
+  kMax,
 };
+}
+typedef _ServerMsgType::T ServerMsgType;
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-#endif  // ARIES_GAMES_BOMBERMANCLIENT_SRC_STATES_GAME_STATE_H
+#endif  // ARIES_GAMES_BOMBERMANCLIENT_SRC_NETWORK_PROTOCOL_DEF_H
 // -----------------------------------------------------------------------------

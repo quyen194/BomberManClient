@@ -5,49 +5,35 @@
   author:    quyen19492
   email:     quyen19492@gmail.com
 
-  created:   2025/11/06 6:09
-  filename:  AriesGames\BomberManClient\src\states\game_state.h
+  created:   2025/11/09 9:07
+  filename:  AriesGames\BomberManClient\src\network\net_client.h
 
   purpose:
 *********************************************************************/
 
 
 // -----------------------------------------------------------------------------
-#ifndef ARIES_GAMES_BOMBERMANCLIENT_SRC_STATES_GAME_STATE_H
-#define ARIES_GAMES_BOMBERMANCLIENT_SRC_STATES_GAME_STATE_H
+#ifndef ARIES_GAMES_BOMBERMANCLIENT_SRC_NETWORK_NET_CLIENT_H
+#define ARIES_GAMES_BOMBERMANCLIENT_SRC_NETWORK_NET_CLIENT_H
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-#include "states/sdl_state.h"
-#include "core/asset_manager.h"
-#include "map/map_manager.h"
-// -----------------------------------------------------------------------------
-
+#include "map/map_updater.h"
 
 // -----------------------------------------------------------------------------
 
-class GameState : public MapManager {
+
+// -----------------------------------------------------------------------------
+
+class NetClient : public MapUpdater {
  public:
-  GameState();
-  virtual ~GameState();
+  NetClient();
+  virtual ~NetClient();
 
-  void Loop();
-  void Update(float delta_time);
-  void Draw();
-
-  void HandleKeyInput(Player *player, SDL_Event &event);
-
-  void TestParsePlayers();
-
- private:
-  SDLState sdl_state_;
-  AssetManager asset_manager_;
-
- private:
-  bool inited_;
+ protected:
 };
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-#endif  // ARIES_GAMES_BOMBERMANCLIENT_SRC_STATES_GAME_STATE_H
+#endif  // ARIES_GAMES_BOMBERMANCLIENT_SRC_NETWORK_NET_CLIENT_H
 // -----------------------------------------------------------------------------

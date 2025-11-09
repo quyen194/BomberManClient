@@ -22,18 +22,25 @@ add_executable (BomberManClient
     "src/states/sdl_state.cpp"
     "src/core/asset_manager.h"
     "src/core/asset_manager.cpp"
-    "src/core/timer.h"
-    "src/core/animation.h"
+    "src/effects/timer.h"
+    "src/effects/animation.h"
     "src/entities/map_tile.h"
     "src/entities/spoil.h"
     "src/map/map_manager.h"
     "src/map/map_manager.cpp"
     "src/states/game_state.h"
     "src/states/game_state.cpp"
+    "src/entities/player.h"
+    "src/effects/movement.h"
+    "src/effects/movement.cpp"
+    "src/map/map_updater.h"
+    "src/network/net_client.h"
+    "src/network/net_client.cpp"
+    "src/network/protocol_def.h"
 )
 
 target_include_directories(BomberManClient PUBLIC
-    ${CMAKE_SOURCE_DIR}/libs/json/nlohmann
+    ${CMAKE_SOURCE_DIR}/libs/json
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 

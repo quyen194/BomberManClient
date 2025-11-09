@@ -5,45 +5,40 @@
   author:    quyen19492
   email:     quyen19492@gmail.com
 
-  created:   2025/11/04 20:28
-  filename:  AriesGames\BomberManClient\src\core\animation.h
+  created:   2025/11/09 8:57
+  filename:  AriesGames\BomberManClient\src\map\map_updater.h
 
   purpose:
 *********************************************************************/
 
 
 // -----------------------------------------------------------------------------
-#ifndef ARIES_GAMES_BOMBERMANCLIENT_SRC_CORE_ANIMATION_H
-#define ARIES_GAMES_BOMBERMANCLIENT_SRC_CORE_ANIMATION_H
+#ifndef ARIES_GAMES_BOMBERMANCLIENT_SRC_MAP_MAP_UPDATER_H
+#define ARIES_GAMES_BOMBERMANCLIENT_SRC_MAP_MAP_UPDATER_H
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-#include "timer.h"
+#include <nlohmann/json.hpp>
+
+#include "network/protocol_def.h"
 // -----------------------------------------------------------------------------
 
 
 // -----------------------------------------------------------------------------
+using json = nlohmann::json;
+// -----------------------------------------------------------------------------
 
-class Animation {
+// -----------------------------------------------------------------------------
+
+class MapUpdater {
  public:
-  Animation() : timer(0), frameCount(0) {}
-  Animation(int frameCount, float length) : timer(length), frameCount(frameCount) {}
+  virtual void UpdatePlayers(json &obj) = 0;
 
-  float getLength() const { return timer.getLength(); }
-  int currentFrame() const {
-    return static_cast<int>(timer.getTime() / timer.getLength() * frameCount);
-  }
-  void step(float deltaTime) {
-    timer.step(deltaTime);
-  }
-
- private:
-  Timer timer;
-  int frameCount;
+ protected:
+  ServerMsgType server_msg_type_;
 };
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-#endif  // ARIES_GAMES_BOMBERMANCLIENT_SRC_CORE_ANIMATION_H
+#endif  // ARIES_GAMES_BOMBERMANCLIENT_SRC_MAP_MAP_UPDATER_H
 // -----------------------------------------------------------------------------
-

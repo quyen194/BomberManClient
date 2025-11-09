@@ -5,49 +5,52 @@
   author:    quyen19492
   email:     quyen19492@gmail.com
 
-  created:   2025/11/06 6:09
-  filename:  AriesGames\BomberManClient\src\states\game_state.h
-
+  created:   2025/11/04 20:25
+  filename:  AriesGames\BomberManClient\src\core\timer.h
+  
   purpose:
 *********************************************************************/
 
 
 // -----------------------------------------------------------------------------
-#ifndef ARIES_GAMES_BOMBERMANCLIENT_SRC_STATES_GAME_STATE_H
-#define ARIES_GAMES_BOMBERMANCLIENT_SRC_STATES_GAME_STATE_H
+#ifndef ARIES_GAMES_BOMBERMANCLIENT_SRC_CORE_TIMER_H
+#define ARIES_GAMES_BOMBERMANCLIENT_SRC_CORE_TIMER_H
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-#include "states/sdl_state.h"
-#include "core/asset_manager.h"
-#include "map/map_manager.h"
+//#include "include/macro.h"
 // -----------------------------------------------------------------------------
 
 
 // -----------------------------------------------------------------------------
 
-class GameState : public MapManager {
+class Timer {
  public:
-  GameState();
-  virtual ~GameState();
+  Timer(float length) : length_(length), time_(0), total_time_(0), timeout_(false) {}
 
-  void Loop();
-  void Update(float delta_time);
-  void Draw();
+  void Step(float delta_time) {
+    time_ += delta_time;
+    if (time_ >= length_) {
+      time_ = fmodf(time_, length_);
+    }
+    total_time_ += delta_time;
+  }
 
-  void HandleKeyInput(Player *player, SDL_Event &event);
+  void Reset() { time_ = 0; }
 
-  void TestParsePlayers();
+  float GetLength() const { return length_; }
+  float GetTime() const { return time_; }
+  float GetTotalTime() const { return total_time_; }
+  bool IsTimeout() const { return timeout_; }
 
  private:
-  SDLState sdl_state_;
-  AssetManager asset_manager_;
-
- private:
-  bool inited_;
+  float length_;
+  float time_;
+  float total_time_;
+  bool timeout_;
 };
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-#endif  // ARIES_GAMES_BOMBERMANCLIENT_SRC_STATES_GAME_STATE_H
+#endif  // ARIES_GAMES_BOMBERMANCLIENT_SRC_CORE_TIMER_H
 // -----------------------------------------------------------------------------

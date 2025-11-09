@@ -21,36 +21,15 @@
 #include <string>
 #include <vector>
 
-#include "core/animation.h"
+#include "effects/animation.h"
+
 #include "entities/map_tile.h"
+#include "entities/player.h"
 #include "entities/spoil.h"
+
 #include "states/sdl_state.h"
 // -----------------------------------------------------------------------------
 
-
-// -----------------------------------------------------------------------------
-namespace _PlayerDir {
-enum T {
-  kDown,
-  kUp,
-  kLeft,
-  kRight,
-  kMax,
-};
-};
-typedef _PlayerDir::T PlayerDir;
-// -----------------------------------------------------------------------------
-
-// -----------------------------------------------------------------------------
-namespace _PlayerNo {
-enum T {
-  k1,
-  k2,
-  kMax,
-};
-};
-typedef _PlayerNo::T PlayerNo;
-// -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
 struct AssetTexture {
@@ -79,8 +58,10 @@ class AssetManager {
 
   SDL_Texture* DragonEggGstTexture() { return dragon_egg_gst_texture_; }
 
-  Animation PlayerAnimation() { return player_animation_; }
   SDL_Texture* PlayerTexture(PlayerNo no) { return player_textures_[no]; }
+  SDL_FRect PlayerStandRect(MoveDir dir);
+  Animation PlayerAnimation(MoveDir dir);
+  SDL_FRect PlayerAnimationRect(MoveDir dir);
 
  private:
   void Unload();
@@ -96,8 +77,10 @@ class AssetManager {
 
   SDL_Texture *dragon_egg_gst_texture_;
 
-  Animation player_animation_;
   std::vector<SDL_Texture *> player_textures_;
+  std::vector<SDL_FRect> player_stand_rects_;
+  std::vector<Animation> player_animations_;
+  std::vector<SDL_FRect> player_animation_rects_;
 
   static AssetManager* instance_;
 };

@@ -5,82 +5,80 @@
   author:    quyen19492
   email:     quyen19492@gmail.com
 
-  created:   2025/11/05 4:52
-  filename:  AriesGames\BomberManClient\src\entities\map_tile.h
+  created:   2025/11/08 6:09
+  filename:  AriesGames\BomberManClient\src\entities\player.h
 
   purpose:
 *********************************************************************/
 
 
 // -----------------------------------------------------------------------------
-#ifndef ARIES_GAMES_BOMBERMANCLIENT_SRC_ENTITIES_MAP_TILE_H
-#define ARIES_GAMES_BOMBERMANCLIENT_SRC_ENTITIES_MAP_TILE_H
+#ifndef ARIES_GAMES_BOMBERMANCLIENT_SRC_ENTITIES_PLAYER_H
+#define ARIES_GAMES_BOMBERMANCLIENT_SRC_ENTITIES_PLAYER_H
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-#include "glm/glm.hpp"
+#include <string>
 
-#include "effects/animation.h"
+#include "effects/movement.h"
 // -----------------------------------------------------------------------------
 
 
 // -----------------------------------------------------------------------------
-namespace _AssetTileType {
+namespace _AssetPlayerDir {
 enum T {
-  kBalk,
-  kWall,
-  kGrass,
-  kTeleportGate,
-  kQuarantineZone,
-  kDragonEggGst,
+  kDown,
+  kUp,
+  kLeft,
+  kRight,
   kMax,
 };
 }
-typedef _AssetTileType::T AssetTileType;
+typedef _AssetPlayerDir::T AssetPlayerDir;
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-namespace _MapTileType {
+namespace _PlayerNo {
 enum T {
-  kGrass = 0,
-  kWall = 1,
-  kBalk = 2,
-  kTeleportGate = 3,
-  kQuarantineZone = 4,
-  kDragonEggGst = 5,
+  k1,
+  k2,
+  kMax,
 };
 }
-typedef _MapTileType::T MapTileType;
+typedef _PlayerNo::T PlayerNo;
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
 
-struct MapTile {
-  virtual ~MapTile() {}
+struct Player {
+  std::string server_id;
+  PlayerNo player_no;
 
-  MapTileType type;
   glm::vec2 map_pos;
   glm::vec2 screen_pos;
   SDL_Texture *texture = nullptr;
-};
-// -----------------------------------------------------------------------------
-
-// -----------------------------------------------------------------------------
-
-struct StaticMapTile : public MapTile {
   SDL_FRect rect;
+  bool is_moving = false;
+  Movement movement;
+
+  int speed;
+  int power;
+  int delay;
+  int lives;
+  int score;
+  int box;
+  int dragonEggSpeed;
+  int dragonEggAttack;
+  int dragonEggDelay;
+  int dragonEggMystic;
+  int dragonEggMysticAddEgg;
+  int dragonEggMysticMinusEgg;
+  int dragonEggMysticIsolateGate;
+  int gstEggBeingAttacked;
+  int quarantine;
 };
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-
-struct DynamicMapTile : public MapTile {
-  Animation animation;
-  SDL_Texture *bg_texture = nullptr;
-  SDL_FRect bg_rect;
-};
-// -----------------------------------------------------------------------------
-
-// -----------------------------------------------------------------------------
-#endif  // ARIES_GAMES_BOMBERMANCLIENT_SRC_ENTITIES_MAP_TILE_H
+#endif  // ARIES_GAMES_BOMBERMANCLIENT_SRC_ENTITIES_PLAYER_H
 // -----------------------------------------------------------------------------
