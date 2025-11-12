@@ -65,6 +65,7 @@ class AssetManager {
 
  private:
   void Unload();
+  std::string R(std::string path);
   SDL_Texture *loadTexture(SDL_Renderer *renderer, const std::string &filepath);
 
  private:
