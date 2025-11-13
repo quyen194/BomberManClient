@@ -39,6 +39,10 @@ else()
     add_executable(${EXECUTABLE_NAME})
 endif()
 
+target_include_directories(${EXECUTABLE_NAME} PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
 # Add your sources to the target
 target_sources (${EXECUTABLE_NAME}
 PRIVATE
@@ -86,8 +90,14 @@ endif()
 
 # glm (C++ mathematics library for graphics software)
 add_subdirectory(
-    "${CMAKE_SOURCE_DIR}/libs/glm"
-    "${CMAKE_BINARY_DIR}/glm"
+    ${CMAKE_SOURCE_DIR}/libs/glm
+    ${CMAKE_BINARY_DIR}/glm
+    EXCLUDE_FROM_ALL
+)
+
+add_subdirectory(
+    ${CMAKE_SOURCE_DIR}/libs/json
+    ${CMAKE_BINARY_DIR}/json
     EXCLUDE_FROM_ALL
 )
 
@@ -95,16 +105,16 @@ add_subdirectory(
 # we use EXCLUDE_FROM_ALL so that its install targets and configs don't
 # pollute upwards into our configuration.
 add_subdirectory(
-    "${CMAKE_SOURCE_DIR}/libs/SDL"
-    "${CMAKE_BINARY_DIR}/SDL"
+    ${CMAKE_SOURCE_DIR}/libs/SDL
+    ${CMAKE_BINARY_DIR}/SDL
     EXCLUDE_FROM_ALL
 )
 
 ## If you don't want SDL_ttf, then remove this section.
 #set(SDLTTF_VENDORED ON) # tell SDL_ttf to build its own dependencies
 #add_subdirectory(
-#    "${CMAKE_SOURCE_DIR}/libs/SDL_ttf"
-#    "${CMAKE_BINARY_DIR}/SDL_ttf"
+#    ${CMAKE_SOURCE_DIR}/libs/SDL_ttf
+#    ${CMAKE_BINARY_DIR}/SDL_ttf
 #    EXCLUDE_FROM_ALL
 #)
 
@@ -120,8 +130,8 @@ set(SDLMIXER_VORBIS_VORBISFILE OFF)
 set(SDLMIXER_FLAC_LIBFLAC OFF)
 set(SDLMIXER_VENDORED ON)   # tell SDL_mixer to build its own dependencies
 add_subdirectory(
-    "${CMAKE_SOURCE_DIR}/libs/SDL_mixer"
-    "${CMAKE_BINARY_DIR}/SDL_mixer"
+    ${CMAKE_SOURCE_DIR}/libs/SDL_mixer
+    ${CMAKE_BINARY_DIR}/SDL_mixer
     EXCLUDE_FROM_ALL
 )
 
@@ -132,19 +142,15 @@ set(SDLIMAGE_BMP OFF)
 set(SDLIMAGE_JPEG OFF)
 set(SDLIMAGE_WEBP OFF)
 add_subdirectory(
-    "${CMAKE_SOURCE_DIR}/libs/SDL_image"
-    "${CMAKE_BINARY_DIR}/SDL_image"
+    ${CMAKE_SOURCE_DIR}/libs/SDL_image
+    ${CMAKE_BINARY_DIR}/SDL_image
     EXCLUDE_FROM_ALL
 )
 
 add_subdirectory(
-    "${CMAKE_SOURCE_DIR}/libs/json"
-    "${CMAKE_BINARY_DIR}/json"
+    ${CMAKE_SOURCE_DIR}/libs/SDL_net
+    ${CMAKE_BINARY_DIR}/SDL_net
     EXCLUDE_FROM_ALL
-)
-
-target_include_directories(${EXECUTABLE_NAME} PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
 # Link SDL to our executable. This also makes its include directory available to us.
@@ -154,6 +160,7 @@ target_link_libraries(${EXECUTABLE_NAME} PUBLIC
 #   SDL3_ttf::SDL3_ttf      # remove if you are not using SDL_ttf
     SDL3_mixer::SDL3_mixer  # remove if you are not using SDL_mixer
     SDL3_image::SDL3_image  # remove if you are not using SDL_image
+    SDL3_net::SDL3_net      # remove if you are not using SDL_net
     SDL3::SDL3              # If using satelite libraries, SDL must be the last item in the list.
 )
 
@@ -222,10 +229,6 @@ elseif(EMSCRIPTEN)
         file(RELATIVE_PATH rel "${ASSETS_DIR}" "${file}")
         list(APPEND EM_PRELOAD "--preload-file \"${file}@/assets/${rel}\"")
     endforeach()
-    foreach(file ${RESOURCE_FILES})
-        file(RELATIVE_PATH rel "${RESOURCES_DIR}" "${file}")
-        list(APPEND EM_PRELOAD "--preload-file \"${file}@/resources/${rel}\"")
-    endforeach()
     string(REPLACE ";" " " EM_PRELOAD_STR "${EM_PRELOAD}")
     target_link_libraries(${EXECUTABLE_NAME} PRIVATE ${EM_PRELOAD_STR})
 
@@ -262,22 +265,26 @@ else()
 
     # Copy game assets
     copy_tree("${ASSET_FILES}" "${ASSETS_DIR}" "assets")
-    # Copy bundle resources (logo, storyboard, etc.)
-    copy_tree("${RESOURCE_FILES}" "${RESOURCES_DIR}" "resources")
+    if(APPLE)
+        # Copy bundle resources (logo, storyboard, etc.)
+        copy_tree("${RESOURCE_FILES}" "${RESOURCES_DIR}" "resources")
+    endif()
 endif()
 
 # ===================================================================
 # APPLE BUNDLE SETTINGS – Auto-include logo.png, storyboard, Info.plist
 # ===================================================================
-set_target_properties(${EXECUTABLE_NAME} PROPERTIES
-    MACOSX_BUNDLE TRUE
-    MACOSX_BUNDLE_INFO_PLIST "${RESOURCES_DIR}/Info.plist.in"
-    XCODE_GENERATE_SCHEME TRUE
-    XCODE_ATTRIBUTE_BUNDLE_IDENTIFIER "com.bomberman.vn"
-    XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.bomberman.vn"
-    XCODE_ATTRIBUTE_CURRENTYEAR "2025"
-    RESOURCE "${RESOURCE_FILES}"
-)
+if(APPLE)
+    set_target_properties(${EXECUTABLE_NAME} PROPERTIES
+        MACOSX_BUNDLE TRUE
+        MACOSX_BUNDLE_INFO_PLIST "${RESOURCES_DIR}/Info.plist.in"
+        XCODE_GENERATE_SCHEME TRUE
+        XCODE_ATTRIBUTE_BUNDLE_IDENTIFIER "com.bomberman.vn"
+        XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.bomberman.vn"
+        XCODE_ATTRIBUTE_CURRENTYEAR "2025"
+        RESOURCE "${RESOURCE_FILES}"
+    )
+endif()
 
 # Visual Studio: set as startup project
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${EXECUTABLE_NAME}")
